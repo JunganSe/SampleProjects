@@ -1,42 +1,84 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EfCoreRelations;
+namespace EfCoreRelations.OneToOne;
 
-public class OneToOne
+public class Parent
 {
-    public class Parent
-    {
-        public int Id { get; set; }
+    // Key
+    public int Id { get; set; }
 
-        public Child Child { get; set; }
+    // Data
+    public string Name { get; set; }
+
+    // Nav
+    public Child Child { get; set; }
+}
+
+public class Child
+{
+    // Key
+    public int Id { get; set; }
+    public int ParentId { get; set; }
+
+    // Data
+    public string Name { get; set; }
+
+    // Nav
+    public Parent Parent { get; set; }
+}
+
+
+
+public class Context : DbContext
+{
+    public DbSet<Parent> Parents { get; set; }
+    public DbSet<Child> Children { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite("Data Source=./Database/EfCoreRelations.sqlite");
+        }
     }
 
-    public class Child
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public int Id { get; set; }
-        public int ParentId { get; set; }
+        // Ändra default delete behavior: (Cascade är standard.)
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+    }
+}
 
-        public Parent Parent { get; set; }
+public class Worker
+{
+    private readonly Context _context = new();
+
+    public void CreateAndSeed()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+
+        var parents = new List<Parent>();
+        parents.Add(new Parent() { Name = "Parent A" });
+        parents.Add(new Parent() { Name = "Parent B" });
+        _context.Parents.AddRange(parents);
+        _context.SaveChanges();
+
+        var children = new List<Child>();
+        children.Add(new Child() { Name = "Child A", ParentId = parents[0].Id });
+        children.Add(new Child() { Name = "Child B", ParentId = parents[1].Id });
+        //children.Add(new Child() { Name = "Child C" });
+        _context.Children.AddRange(children);
+
+        _context.SaveChanges();
     }
 
-
-
-    public class Context : DbContext
+    public void DeleteParentA()
     {
-        DbSet<Parent> Parents { get; set;}
-        DbSet<Child> Children { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Options...
-            }
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-        }
+        var parent = _context.Parents.First(p => p.Name.Contains("A"));
+        _context.Parents.Remove(parent);
+        _context.SaveChanges();
     }
 }
