@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EfCoreRelations.OneToOne;
 
@@ -69,7 +68,7 @@ public class Worker
         var children = new List<Child>();
         children.Add(new Child() { Name = "Child A", ParentId = parents[0].Id });
         children.Add(new Child() { Name = "Child B", ParentId = parents[1].Id });
-        //children.Add(new Child() { Name = "Child C" });
+        //children.Add(new Child() { Name = "Child C" }); // Går bara om FK är nullable.
         _context.Children.AddRange(children);
 
         _context.SaveChanges();
