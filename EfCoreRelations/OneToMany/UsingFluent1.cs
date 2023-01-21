@@ -25,7 +25,7 @@ public class Child
 
 
 
-public class OneToMany1Context : BaseContext
+public class OneToManyUsingFluent1Context : BaseContext
 {
     public DbSet<Parent> Parents { get; set; }
     public DbSet<Child> Children { get; set; }

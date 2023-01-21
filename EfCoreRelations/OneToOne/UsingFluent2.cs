@@ -19,7 +19,7 @@ public class Child
 
 
 
-public class OneToOne2Context : BaseContext
+public class OneToOneUsingFluent2Context : BaseContext
 {
     public DbSet<Parent> Parents { get; set; }
     public DbSet<Child> Children { get; set; }

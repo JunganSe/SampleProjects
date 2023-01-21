@@ -1,4 +1,6 @@
-﻿namespace EfCoreRelations.OneToMany.UsingConvention;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace EfCoreRelations.OneToMany.UsingConvention;
 
 public class Parent
 {
@@ -17,4 +19,12 @@ public class Child
 
     // Nav
     public Parent Parent { get; set; } // Navigation property som EF tolkar för att skapa relationen.
+}
+
+
+
+public class OneToManyUsingConventionContext : BaseContext
+{
+    public DbSet<Parent> Parents { get; set; }
+    public DbSet<Child> Children { get; set; }
 }
