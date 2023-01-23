@@ -27,13 +27,13 @@ public class OneToOneUsingFluent2Context : BaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Child>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(c => c.MyCustomPK);
         modelBuilder.Entity<Child>()
             .HasOne<Parent>()
             .WithOne()
-            .HasForeignKey<Child>(e => e.MyCustomParentFK);
+            .HasForeignKey<Child>(c => c.MyCustomParentFK);
 
         modelBuilder.Entity<Parent>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(p => p.MyCustomPK);
     }
 }

@@ -33,20 +33,20 @@ public class ManyToManyWithJunctionTableUsingFluent2Context : BaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Child>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(c => c.MyCustomPK);
 
         modelBuilder.Entity<Parent>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(p => p.MyCustomPK);
 
         modelBuilder.Entity<Parent_Child>()
-            .HasKey(e => new { e.MyCustomParentFK, e.MyCustomChildFK });
+            .HasKey(pc => new { pc.MyCustomParentFK, pc.MyCustomChildFK });
         modelBuilder.Entity<Parent_Child>()
             .HasOne<Child>()
             .WithMany()
-            .HasForeignKey(e => e.MyCustomChildFK);
+            .HasForeignKey(pc => pc.MyCustomChildFK);
         modelBuilder.Entity<Parent_Child>()
             .HasOne<Parent>()
             .WithMany()
-            .HasForeignKey(e => e.MyCustomParentFK);
+            .HasForeignKey(pc => pc.MyCustomParentFK);
     }
 }

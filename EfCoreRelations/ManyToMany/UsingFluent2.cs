@@ -26,12 +26,12 @@ public class ManyToManyUsingFluent2Context : BaseContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Child>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(c => c.MyCustomPK);
         modelBuilder.Entity<Child>()
             .HasMany<Parent>()
             .WithMany();
 
         modelBuilder.Entity<Parent>()
-            .HasKey(e => e.MyCustomPK);
+            .HasKey(p => p.MyCustomPK);
     }
 }

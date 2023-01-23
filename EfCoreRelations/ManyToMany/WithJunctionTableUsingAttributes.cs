@@ -48,6 +48,6 @@ public class ManyToManyWithJunctionTableUsingAttributesContext : BaseContext
     {
         // Kompositnyckeln i kopplingstabellen måste anges med fluent.
         modelBuilder.Entity<Parent_Child>()
-            .HasKey(e => new { e.MyCustomParentFK, e.MyCustomChildFK });
+            .HasKey(pc => new { pc.MyCustomParentFK, pc.MyCustomChildFK });
     }
 }
