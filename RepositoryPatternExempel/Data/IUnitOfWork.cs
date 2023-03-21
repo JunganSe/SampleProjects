@@ -4,8 +4,8 @@ namespace RepositoryPatternExempel.Data;
 
 public interface IUnitOfWork : IDisposable
 {
-    ICourseRepository Courses { get; init; }
-    IStudentRepository Students { get; init; }
+    public ICourseRepository Courses { get; }
+    public IStudentRepository Students { get; }
 
     Task<int> SaveAsync();
 }

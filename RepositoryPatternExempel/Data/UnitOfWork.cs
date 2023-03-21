@@ -5,25 +5,29 @@ namespace RepositoryPatternExempel.Data;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly SchoolContext _context;
+    private readonly SchoolContext _schoolContext;
+    private ICourseRepository? _courseRepository; // Backing field för propertyn.
+    private IStudentRepository? _studentRepository;
 
-    public ICourseRepository Courses { get; init; }
-    public IStudentRepository Students { get; init; }
+    // Repon instansieras först när de ska nås, så bara de som faktiskt behövs blir instansierade.
+    public ICourseRepository Courses => _courseRepository ??= new CourseRepository(_schoolContext); // Om _courseRepository är null så instansieras det först innan det returneras.
+    public IStudentRepository Students => _studentRepository ??= new StudentRepository(_schoolContext);
 
-    public UnitOfWork(SchoolContext context)
+    public UnitOfWork()
     {
-        _context = context;
-        Courses = new CourseRepository(context);
-        Students = new StudentRepository(context);
+        // Flera context kan instansieras och skickas till respektive repo som behöver dem.
+        // Det är då en bra idé att instansiera dem först vid anrop, på samma sätt som repositories gör.
+        _schoolContext = new SchoolContext();
     }
 
     public async Task<int> SaveAsync()
     {
-        return await _context.SaveChangesAsync();
+        return await _schoolContext.SaveChangesAsync();
     }
 
     public void Dispose() // Viktigt att disposa context när unit of work disposas.
     {
-        _context.Dispose();
+        _schoolContext.Dispose();
+        GC.SuppressFinalize(this); // Ska tydligen vara med för att dispose-delen ska fungera korrekt.
     }
 }

@@ -18,31 +18,36 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
 
     // Hämta utan include-delar.
-    public async Task<TEntity?> GetAsync(int id) => await _entities.FindAsync(id);
+    public async Task<TEntity?> GetOnlyAsync(int id)
+    {
+        return await _entities.FindAsync(id);
+    }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllOnlyAsync()
     {
         return await _entities.ToListAsync();
     }
 
-    public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<TEntity?> SingleOrDefaultOnlyAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _entities.SingleOrDefaultAsync(predicate);
     }
 
-    // Hämta med filter och include.
-    // filter: Predicate.
-    // includeProperties: Kommaseparerad lista i sträng.
+    // Hämta med include och filter.
+    // include: Komma/space-separerad lista i sträng.
+    // predicate: Används som filter.
     public async Task<IEnumerable<TEntity>> GetEntitiesAsync(
-        Expression<Func<TEntity, bool>>? filter = null,
-        string? includeProperties = null)
+        string? include = null,
+        Expression<Func<TEntity, bool>>? predicate = null)
     {
         IQueryable<TEntity> query = _entities;
-        if (filter != null)
-            query = query.Where(filter);
-        if (!string.IsNullOrWhiteSpace(includeProperties))
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        var separators = new[] { ',', ' ' };
+        if (!string.IsNullOrWhiteSpace(include))
         {
-            foreach (var includeProperty in includeProperties.Split(','))
+            foreach (var includeProperty in include.Split(separators))
                 query = query.Include(includeProperty);
         }
 

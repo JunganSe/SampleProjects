@@ -1,6 +1,9 @@
 ﻿using RepositoryPatternExempel.Data;
 using RepositoryPatternExempel.Models;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+
 namespace RepositoryPatternExempel;
 
 internal class Program
@@ -12,6 +15,8 @@ internal class Program
         await Test();
     }
 
+    // Metoderna nedan är endast för att testa funktion, de ingår inte i pattern.
+
     internal static async Task Reset()
     {
         var context = new SchoolContext();
@@ -21,8 +26,7 @@ internal class Program
 
     private static async Task Seed()
     {
-        // using för konsolappar, behövs inte i asp?
-        using var unitOfWork = new UnitOfWork(new SchoolContext());
+        using var unitOfWork = new UnitOfWork(); // using för konsolappar, behövs inte i asp?
 
         // Skapa studenter.
         await unitOfWork.Students.AddAsync(new Student() { Name = "Andy" });
@@ -46,8 +50,8 @@ internal class Program
         await unitOfWork.SaveAsync();
 
         // Tilldela kurser.
-        var bella = await unitOfWork.Students.GetAsync(2);
-        var alpha = await unitOfWork.Courses.GetAsync(1);
+        var bella = await unitOfWork.Students.GetOnlyAsync(2);
+        var alpha = await unitOfWork.Courses.GetOnlyAsync(1);
         bella.Courses.Add(alpha);
         bella.Courses.Add(courses[1]); // Beta
         courses.ForEach(c => students[2].Courses.Add(c)); // Lägg till alla kurser på Charlie.
@@ -57,23 +61,27 @@ internal class Program
 
     private static async Task Test()
     {
-        using var unitOfWork = new UnitOfWork(new SchoolContext());
+        using var unitOfWork = new UnitOfWork();
 
-        var studentById = await unitOfWork.Students.GetAsync(1);
-        var allStudents = await unitOfWork.Students.GetAllAsync();
+        var studentById = await unitOfWork.Students.GetOnlyAsync(1);
+        var allStudents = await unitOfWork.Students.GetAllOnlyAsync();
         var studentsByName = await unitOfWork.Students.GetStudentsByNameAsync("an");
 
-        var dani = await unitOfWork.Students.GetEntitiesAsync(s => s.Name == "Dani", "Courses");
+        var dani = await unitOfWork.Students.GetEntitiesAsync("Courses", s => s.Name == "Dani");
+        var allCourses = await unitOfWork.Courses.GetEntitiesAsync("Students");
 
         // Radera
-        var studentToDelete = await unitOfWork.Students.GetAsync(1); // Hämta student på id.
+        var studentToDelete = await unitOfWork.Students.GetOnlyAsync(1); // Hämta student på id.
         unitOfWork.Courses.RemoveRange(studentToDelete.Courses); // Radera alla kurser som studenten har.
         unitOfWork.Students.Remove(studentToDelete); // Radera studenten.
         await unitOfWork.SaveAsync(); // Utför ändringarna.
 
         // Redigera
-        var studentToEdit = await unitOfWork.Students.GetAsync(2); // Hämta student på id.
+        var studentToEdit = await unitOfWork.Students.GetOnlyAsync(2); // Hämta student på id.
         studentToEdit.Name = "New name"; // Redigera studenten.
         await unitOfWork.SaveAsync(); // Utför ändringarna.
     }
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8604 // Possible null reference argument.

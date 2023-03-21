@@ -6,10 +6,10 @@ public interface IRepository<TEntity> where TEntity : class
 {
 
     // Hämta
-    Task<TEntity?> GetAsync(int id);
-    Task<IEnumerable<TEntity>> GetAllAsync();
-    Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate); // Parametern gör att man kan skicka in ett vanligt predicate.
-    Task<IEnumerable<TEntity>> GetEntitiesAsync(Expression<Func<TEntity, bool>>? filter = null, string includeProperties = "");
+    Task<TEntity?> GetOnlyAsync(int id);
+    Task<IEnumerable<TEntity>> GetAllOnlyAsync();
+    Task<TEntity?> SingleOrDefaultOnlyAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<IEnumerable<TEntity>> GetEntitiesAsync(string? include = null, Expression<Func<TEntity, bool>>? predicate = null);
 
     // Lägga till
     Task AddAsync(TEntity entity);
