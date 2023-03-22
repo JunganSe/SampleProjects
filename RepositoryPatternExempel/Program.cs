@@ -71,14 +71,12 @@ internal class Program
         var allCourses = await unitOfWork.Courses.GetEntitiesAsync(null, "Students");
 
         // Radera
-        var studentToDelete = await unitOfWork.Students.GetOnlyAsync(1); // Hämta student på id.
         var studentToDelete = await unitOfWork.Students.GetEntityAsync(s => s.Id == 2, "Courses"); // Hämta student på id.
         unitOfWork.Courses.RemoveRange(studentToDelete.Courses); // Radera alla kurser som studenten har.
         unitOfWork.Students.Remove(studentToDelete); // Radera studenten.
         await unitOfWork.SaveAsync(); // Utför ändringarna.
 
         // Redigera
-        var studentToEdit = await unitOfWork.Students.GetOnlyAsync(2); // Hämta student på id.
         var studentToEdit = await unitOfWork.Students.GetOnlyAsync(1); // Hämta student på id.
         studentToEdit.Name = "New name"; // Redigera studenten.
         await unitOfWork.SaveAsync(); // Utför ändringarna.
