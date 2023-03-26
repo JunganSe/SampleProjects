@@ -7,5 +7,5 @@ public interface IUnitOfWork : IDisposable
     public ICourseRepository Courses { get; }
     public IStudentRepository Students { get; }
 
-    Task<int> SaveAsync();
+    Task<bool> TrySaveAsync();
 }

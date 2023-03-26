@@ -47,7 +47,7 @@ internal class Program
             };
         await unitOfWork.Courses.AddRangeAsync(courses);
 
-        await unitOfWork.SaveAsync();
+        await unitOfWork.TrySaveAsync();
 
         // Tilldela kurser.
         var bella = await unitOfWork.Students.GetOnlyAsync(2);
@@ -56,7 +56,7 @@ internal class Program
         bella.Courses.Add(courses[1]); // Beta
         courses.ForEach(c => students[2].Courses.Add(c)); // Lägg till alla kurser på Charlie.
 
-        await unitOfWork.SaveAsync();
+        await unitOfWork.TrySaveAsync();
     }
 
     private static async Task Test()
@@ -74,12 +74,12 @@ internal class Program
         var studentToDelete = await unitOfWork.Students.GetEntityAsync(s => s.Id == 2, "Courses"); // Hämta student på id.
         unitOfWork.Courses.RemoveRange(studentToDelete.Courses); // Radera alla kurser som studenten har.
         unitOfWork.Students.Remove(studentToDelete); // Radera studenten.
-        await unitOfWork.SaveAsync(); // Utför ändringarna.
+        await unitOfWork.TrySaveAsync(); // Utför ändringarna.
 
         // Redigera
         var studentToEdit = await unitOfWork.Students.GetOnlyAsync(1); // Hämta student på id.
         studentToEdit.Name = "New name"; // Redigera studenten.
-        await unitOfWork.SaveAsync(); // Utför ändringarna.
+        await unitOfWork.TrySaveAsync(); // Utför ändringarna.
     }
 }
 

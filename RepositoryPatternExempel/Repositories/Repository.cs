@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RepositoryPatternExempel.Repositories.Interfaces;
 using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RepositoryPatternExempel.Repositories;
 
@@ -47,7 +46,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     // Hämta med include och filter.
     // include: Komma/space-separerad lista i sträng.
-    // predicate: Används som filter.
+    // predicate: Använd för att filtrera.
     public async Task<IEnumerable<TEntity>> GetEntitiesAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         string? include = null)

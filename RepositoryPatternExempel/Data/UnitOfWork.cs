@@ -20,9 +20,9 @@ public class UnitOfWork : IUnitOfWork
         _schoolContext = new SchoolContext();
     }
 
-    public async Task<int> SaveAsync()
+    public async Task<bool> TrySaveAsync()
     {
-        return await _schoolContext.SaveChangesAsync();
+        return (await _schoolContext.SaveChangesAsync() > 0);
     }
 
     public void Dispose() // Viktigt att disposa context när unit of work disposas.
