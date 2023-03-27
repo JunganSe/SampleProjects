@@ -10,7 +10,7 @@ public class UnitOfWork : IUnitOfWork
     private IStudentRepository? _studentRepository;
 
     // Repon instansieras först när de ska nås, så bara de som faktiskt behövs blir instansierade.
-    public ICourseRepository Courses => _courseRepository ??= new CourseRepository(_schoolContext); // Om _courseRepository är null så instansieras det först innan det returneras.
+    public ICourseRepository Courses => _courseRepository ??= new CourseRepository(_schoolContext); // Om _courseRepository är null så instansieras det först innan det returneras. "Lazy initialization pattern"
     public IStudentRepository Students => _studentRepository ??= new StudentRepository(_schoolContext);
 
     public UnitOfWork()
