@@ -5,7 +5,10 @@
         static void Main(string[] args)
         {
             var dllImport = new UsingDllImport();
-            dllImport.ShowMessageBox();
+            //dllImport.ShowMessageBox();
+
+            var libraryImport = new UsingLibraryImport();
+            libraryImport.ShowMessageBox();
         }
     }
 }
