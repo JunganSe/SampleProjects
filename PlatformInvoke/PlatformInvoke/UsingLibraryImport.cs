@@ -14,8 +14,8 @@ internal partial class UsingLibraryImport
     //
     // When using LibraryImport, the compiler may give this error:
     // CS8795 "Partial method (...) must have an implementation part because it has accessibility modifiers."
-    // This will go away when the project is built, since the compiler
-    // will generate the implementation part when this attribute is used.
+    // This will go away when the project is built, since the compiler will generate
+    // the implementation part (the other partial) when this attribute is used.
     [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
     private static partial int MessageBoxW(IntPtr hWnd, string lpText, string lpCaption, uint uType);
 
