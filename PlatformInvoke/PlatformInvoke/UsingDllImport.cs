@@ -9,9 +9,8 @@ internal class UsingDllImport
 
     public void ShowMessageBox()
     {
-        int hResult = MessageBox(IntPtr.Zero, "Using DllImport", "Example caption", 0);
+        int hResult = MessageBox(IntPtr.Zero, "Example text using DllImport", "Example caption", 0);
         Console.WriteLine($"hResult: {hResult}");
-
         Helper.DisplayLastError();
     }
 }

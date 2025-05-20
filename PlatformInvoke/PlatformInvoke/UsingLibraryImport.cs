@@ -9,9 +9,8 @@ internal partial class UsingLibraryImport
 
     public void ShowMessageBox()
     {
-        int hResult = MessageBoxW(IntPtr.Zero, "Using LibraryImport", "Example caption", 0);
+        int hResult = MessageBoxW(IntPtr.Zero, "Example text using LibraryImport", "Example caption", 0);
         Console.WriteLine($"hResult: {hResult}");
-
         Helper.DisplayLastError();
     }
 }
