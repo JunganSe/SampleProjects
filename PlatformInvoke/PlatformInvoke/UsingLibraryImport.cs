@@ -30,7 +30,7 @@ internal partial class UsingLibraryImport
     }
 
 
-    // Here, EntryPoint = "MessageBoxW" is used to specify the name of the function to be called.
+    // Here, the 'EntryPoint' property is used to specify the name of the function to be called.
     // This allows the method to be named differently in C# than in the native library.
     [LibraryImport("user32.dll", EntryPoint = "MessageBoxW", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
     private static partial int ShowWindowsMessageBox(IntPtr hWnd, string lpText, string lpCaption, uint uType);
