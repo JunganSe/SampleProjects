@@ -17,13 +17,28 @@ internal partial class UsingLibraryImport
     // CS8795 "Partial method (...) must have an implementation part because it has accessibility modifiers."
     // This will go away when the project is built, since the compiler will generate
     // the implementation part (the other partial) when this attribute is used.
+    
     [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
     private static partial int MessageBoxW(IntPtr hWnd, string lpText, string lpCaption, uint uType);
-
+    
     public void ShowMessageBox()
     {
         Console.WriteLine("Using LibraryImport to open a message box...");
         int hResult = MessageBoxW(IntPtr.Zero, "Example text using LibraryImport", "Example caption", 0);
+        Console.WriteLine($"MessageBoxW hResult: {hResult}");
+        Helper.DisplayLastError();
+    }
+
+
+    // Here, EntryPoint = "MessageBoxW" is used to specify the name of the function to be called.
+    // This allows the method to be named differently in C# than in the native library.
+    [LibraryImport("user32.dll", EntryPoint = "MessageBoxW", StringMarshalling = StringMarshalling.Utf16, SetLastError = true)]
+    private static partial int ShowWindowsMessageBox(IntPtr hWnd, string lpText, string lpCaption, uint uType);
+
+    public void ShowMessageBox2()
+    {
+        Console.WriteLine("Using LibraryImport to open a message box...");
+        int hResult = ShowWindowsMessageBox(IntPtr.Zero, "Example text using LibraryImport", "Example caption", 0);
         Console.WriteLine($"MessageBoxW hResult: {hResult}");
         Helper.DisplayLastError();
     }

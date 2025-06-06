@@ -9,6 +9,7 @@
 
             var libraryImport = new UsingLibraryImport();
             libraryImport.ShowMessageBox();
+            libraryImport.ShowMessageBox2();
         }
     }
 }
