@@ -5,4 +5,5 @@ Various sample projects used for reference.
 - [ ] Basic minimal web api
 - [ ] Configuration (appsettings.json etc)
 - [ ] Platform Invoke (P/Invoke)
+- [ ] IPC (inter-process communication)
 - [ ] And more...
