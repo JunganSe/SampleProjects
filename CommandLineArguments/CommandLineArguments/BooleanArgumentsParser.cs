@@ -6,7 +6,8 @@ internal static class BooleanArgumentsParser
 
     // Uses reflection to get the properties of the type T,
     // and check if they are found in the provided arguments (optionally preceeded by a prefix).
-    // If a property is found, it is set to true, otherwise it is set to false.
+    // If a property is found in the provided arguments it is set to true, otherwise it is set to false.
+    // Replace Console.WriteLine with a logging framework.
     // Also logs a summary of the parsed arguments.
     public static T Parse<T>(string[] arguments) where T : new()
     {
