@@ -2,7 +2,13 @@
 
 internal static class BooleanArgumentsParser
 {
-    public static T Parse<T>(string[] args) where T : new()
+    private const string _prefix = "-";
+
+    // Uses reflection to get the properties of the type T,
+    // and check if they are found in the provided arguments (optionally preceeded by a prefix).
+    // If a property is found, it is set to true, otherwise it is set to false.
+    // Also logs a summary of the parsed arguments.
+    public static T Parse<T>(string[] arguments) where T : new()
     {
         Console.WriteLine("Parsing arguments...");
 
@@ -12,7 +18,7 @@ internal static class BooleanArgumentsParser
             .Where(p => p.PropertyType == typeof(bool));
         foreach (var property in properties)
         {
-            bool value = args.Any(arg => string.Equals(arg, $"-{property.Name}", StringComparison.OrdinalIgnoreCase));
+            bool value = arguments.Any(arg => string.Equals(arg, $"{_prefix}{property.Name}", StringComparison.OrdinalIgnoreCase));
             property.SetValue(output, value);
         }
 
