@@ -6,43 +6,41 @@ namespace SignalListener;
 
 internal class SampleListener
 {
-    public const string PipeName = "SampleListener.SampleCommand";
-
     private readonly ILogger<SampleListener> _logger = NullLogger<SampleListener>.Instance;
     private readonly SynchronizationContext? _syncContext = SynchronizationContext.Current;
     private CancellationTokenSource? _stopSignalListenerCancellation;
 
     /// <summary>
-    /// Starts the stop signal listener asynchronously, running in parallell on the same thread. <br/>
-    /// Invokes the callback when a stop signal is received.
+    /// Starts the signal listener asynchronously, running in parallell on the same thread. <br/>
+    /// Invokes the callback when a signal is received.
     /// </summary>
-    public void Start(Action callback)
+    public void Start(string pipeName, Action callback)
     {
         _stopSignalListenerCancellation = new CancellationTokenSource();
         Task.Run(async () =>
         {
-            await WaitForStopSignal(callback, _stopSignalListenerCancellation.Token);
+            await WaitForStopSignal(pipeName, callback, _stopSignalListenerCancellation.Token);
         });
     }
 
-    private async Task WaitForStopSignal(Action callback, CancellationToken cancellationToken)
+    private async Task WaitForStopSignal(string pipeName, Action callback, CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogDebug("Listening for stop signal...");
-            using var pipeServer = new NamedPipeServerStream(PipeName, PipeDirection.In);
+            _logger.LogDebug("Listening for signal...");
+            using var pipeServer = new NamedPipeServerStream(pipeName, PipeDirection.In);
             await pipeServer.WaitForConnectionAsync(cancellationToken); // Throws if canceled.
 
-            _logger.LogInformation("Stop signal received.");
+            _logger.LogInformation("Signal received.");
             InvokeCallback(callback);
         }
         catch (OperationCanceledException)
         {
-            _logger.LogDebug("Stopped listening for stop signal.");
+            _logger.LogDebug("Stopped listening for signal.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in stop signal listener.");
+            _logger.LogError(ex, "Error when listening for signal.");
         }
     }
 
