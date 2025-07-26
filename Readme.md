@@ -8,4 +8,6 @@ Various sample projects used for reference.
 - [x] Command line arguments (mostly complete)
 - [ ] Platform Invoke (P/Invoke)
 - [ ] IPC (inter-process communication)
+	- [x] Signal listening with pipe server
+	- [ ] Other ways...
 - [ ] And more...
