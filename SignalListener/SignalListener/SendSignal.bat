@@ -1,0 +1,1 @@
+echo "Sending signal" > \\.\pipe\SampleListener.SampleCommand
