@@ -4,6 +4,10 @@ using System.IO.Pipes;
 
 namespace SignalListener;
 
+// This listener listens for a signal on a named pipe and invokes a callback when the signal is received.
+// It checks the SynchronizationContext to ensure that the callback is invoked on the correct thread.
+// After receiving the signal, it stops listening for further signals.
+// TODO: Add an option to continue listening for signals after the first one is received.
 internal class SampleListener
 {
     private readonly ILogger<SampleListener> _logger = NullLogger<SampleListener>.Instance;
